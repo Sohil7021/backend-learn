@@ -1,0 +1,19 @@
+{
+  "name": "06_production-setup",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [
+    "javascript",
+    "backend"
+  ],
+  "author": "Sohil",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "prettier": "^3.1.0"
+  }
+}
