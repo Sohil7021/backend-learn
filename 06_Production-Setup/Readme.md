@@ -39,3 +39,7 @@
             2) we use express-fileUploader or Multer but Multer is use
             3) In utils folder clodinary.js file craeted check and read
             4) In middlewares folder we use Multer package Multer use for uploading file
+
+
+
+> 11  Http Crash Course Lraning Http methods etc.
