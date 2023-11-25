@@ -31,3 +31,11 @@
             4) for tokens use jsonwebtokrn package -> use for tokens use in user.js file
             5) using Mongoose (Pre hook Moddleware) for instant use to save in users.js file
             6) using JWT add tokens .env check user.js file
+
+
+> 10 How to upload file in backend | Multer
+
+            1) We use Cloudinary Platform store image 
+            2) we use express-fileUploader or Multer but Multer is use
+            3) In utils folder clodinary.js file craeted check and read
+            4) In middlewares folder we use Multer package Multer use for uploading file
