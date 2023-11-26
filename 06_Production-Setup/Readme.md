@@ -46,3 +46,6 @@
 
 
 > 12 Route and Controller with debugging using -> Postman API Testing
+
+
+> 13 Logic Building Register Controller
