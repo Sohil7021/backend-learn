@@ -4,6 +4,21 @@ import {User} from "../models/user.models.js"
 import { uploadCloudinary } from "../utils/cloudinary.js"
 import { apiResponse } from "../utils/apiResponce.js"
 
+const generateAccessRefreshToken = async(userId) =>  {
+    try {
+        await User.findById(userId)
+      const accesss =   user.generateAccessToken()
+      const refersh =   user.generateRefreshToken()
+
+      user.refersh = refersh
+   await  user.save({validateBeforeSave:false})
+
+   return {accesss,refersh}
+        
+    } catch (error) {
+        throw new apiError(500, "Somthing went wrong in Token")
+    }
+}
 
 const registerUser = asyncHandler(async(req,res) => {
     // get user detail from fronted
@@ -113,9 +128,98 @@ const registerUser = asyncHandler(async(req,res) => {
 })
 
 
+// Login user
+const loginUser = asyncHandler(async (req,res) => {
+    // req body -> data
+    // username or email
+    //find the user
+    //password check
+    //access and refresh token
+    // send cookie
+
+    const {email,username,passowrd} = req.body
+
+    if(!username || !email) {
+        throw new apiError(400, "username or email is required")
+    }
+    
+  const user =  await  User.findOne({
+        $or:[{username}, {email}]
+    })
+
+    if(!user) {
+        throw new apiError(404,"User does not exist")
+    }
+
+   const isPasswordValid =  await user.isPasswordCorrect(password)
+
+   if(!isPasswordValid) {
+    throw new apiError(401, "Invalid user credentials")
+   }
+       const {accesss,refersh} =  await  generateAccessRefreshToken(user._id)
+
+      const loggedUser =  User.findById(user._id).select("-password -refreshToken")
+
+      const options = {
+        httpOnly: true,
+        secure: true
+      }
+
+
+
+      return res.status(200)
+      .cookie("access",accesss,options)
+      .cookie("refersh",refersh,options)
+      .json(
+        new apiResponse(
+            200,
+            {user: loggedUser,accesss,refersh},
+            "User logged In Successfully"
+
+        )
+      )
+
+
+
+})
+
+// Logout User
+
+const logoutUser = asyncHandler (async(req,res) => {
+    //  Middleware concept in logout 
+   User.findByIdAndUpdate(
+    req.user._id,{
+        $set: {
+            refreshToken: undefined
+        },
+
+
+        
+    },
+    {
+        new: true
+    }
+
+    
+   )
+   const options = {
+    httpOnly: true,
+    secure: true
+  }
+
+  return res
+  .status(200)
+  .clearCookie("Accesss",option)
+  .clearCookie("refresh",option)
+  .json(new apiResponse(200,{},"USer logged out"))
+})
 
 
 
 
 
-export {registerUser}
+
+
+export {registerUser,
+loginUser,
+logoutUser}
